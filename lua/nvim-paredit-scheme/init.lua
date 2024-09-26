@@ -14,14 +14,14 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local extension = require("nvim-paredit-scheme.extension")
+local extension = require("nvim-paredit-racket.extension")
 
 local M = {
     extension = extension
 }
 
 function M.setup(paredit)
-    paredit.extension.add_language_extension("scheme", extension)
+    paredit.extension.add_language_extension("racket", extension)
 end
 
 return M

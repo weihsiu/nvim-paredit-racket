@@ -21,35 +21,35 @@ local traversal = require("nvim-paredit.utils.traversal")
 local nodes = {
     "comment",
     "block_comment", -- for example, #| something |#
-    "directive", -- for example, #!r6rs
+    "directive",     -- for example, #!r6rs
     "boolean",
     "character",
     "string",
-    "escape_sequence", -- escape sequence in string, for example, \n in "abc\n"
+    "escape_sequence",   -- escape sequence in string, for example, \n in "abc\n"
     "number",
-    "symbol", -- identifier
-    "keyword", -- #:identifier
-    "list", -- things surrounded by () or [] or {}
-    "quote", -- '
-    "quasiquote", -- `
-    "syntax", -- #'
-    "quasisyntax", --`
-    "unquote", -- ,
-    "unquote_splicing", -- ,@
-    "unsyntax", -- #,
+    "symbol",            -- identifier
+    "keyword",           -- #:identifier
+    "list",              -- things surrounded by () or [] or {}
+    "quote",             -- '
+    "quasiquote",        -- `
+    "syntax",            -- #'
+    "quasisyntax",       --`
+    "unquote",           -- ,
+    "unquote_splicing",  -- ,@
+    "unsyntax",          -- #,
     "unsyntax_splicing", -- #,@
     "vector",
     "byte_vector",
 }
 
 local forms = {
-    comment = {2, 0},        -- for srfi 62,  #;
-    block_comment = {2, 2},  -- for example, #| something |#
-    string = {1, 1},
-    list = {1, 1},           -- things surrounded by () or [] or {}
-    vector = {2, 1},         -- #(...)
-    byte_vector = {5, 1},    -- #vu8(...)
-    vector = {2, 1},
+    comment = { 2, 0 },     -- for srfi 62,  #;
+    block_comment = { 2, 2 }, -- for example, #| something |#
+    string = { 1, 1 },
+    list = { 1, 1 },        -- things surrounded by () or [] or {}
+    vector = { 2, 1 },      -- #(...)
+    byte_vector = { 5, 1 }, -- #vu8(...)
+    vector = { 2, 1 },
 }
 
 
@@ -121,8 +121,8 @@ end
 -- whether the given node can be considered a 'comment'
 M.node_is_comment = function(node)
     return (find_parent_comment(node)
-    or node:type() == "comment"
-    or node:type() == "block_comment")
+        or node:type() == "comment"
+        or node:type() == "block_comment")
 end
 -- Accepts a Treesitter node representing a form and should return the
 -- 'edges' of the node. This includes the node text and the range covered by
@@ -137,12 +137,12 @@ M.get_form_edges = function(node)
     local size = forms[node:type()]
     if not size then
         -- default to {1, 1}
-        size = {1, 1}
+        size = { 1, 1 }
     end
     -- If it's an inline comment don't do anything
     if node:type() == "comment"
         and vim.api.nvim_buf_get_text(0, form_range[1], form_range[2],
-        form_range[3], form_range[4], {})[1]:sub(1,1) == ";"
+            form_range[3], form_range[4], {})[1]:sub(1, 1) == ";"
     then
         return {}
     end
@@ -156,9 +156,9 @@ M.get_form_edges = function(node)
     right_range[2] = right_range[4] - size[2]
 
     local left_text = vim.api.nvim_buf_get_text(0, left_range[1], left_range[2],
-    left_range[3], left_range[4], {})
+        left_range[3], left_range[4], {})
     local right_text = vim.api.nvim_buf_get_text(0, right_range[1],
-    right_range[2], right_range[3], right_range[4], {})
+        right_range[2], right_range[3], right_range[4], {})
 
     return {
         left = {
